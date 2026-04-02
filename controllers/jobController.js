@@ -19,11 +19,19 @@ export async function getAllJobs(req, res) {
       ];
     }
 
-    const sort = sortByDeadline === 'true'
-      ? { deadline: 1 }
-      : { postedAt: -1 };
+    let query = Job.find(filter);
 
-    const jobs = await Job.find(filter).sort(sort).limit(50);
+    if (sortByDeadline === 'true') {
+      // Sort by deadline: jobs with deadline first (soonest first), then jobs without deadline
+      query = query.sort({ 
+        deadline: 1,  // Ascending: soonest first
+        postedAt: -1  // Then by posted date (newest first)
+      });
+    } else {
+      query = query.sort({ postedAt: -1 });  // Default: newest first
+    }
+
+    const jobs = await query.limit(50);
 
     res.json({ count: jobs.length, jobs });
 
