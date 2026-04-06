@@ -12,7 +12,8 @@ import './cron/scheduler.js';
 
 const app = express();
 app.use(cors());
-app.use(json());
+app.use(json()); // app.use(json()) is middleware that parses JSON data from requests.
+                // When axios sends data to your backend, it sends it as JSON text. Express needs to convert that text into a JavaScript object so your code can use it.
 
 app.use('/api/jobs', jobRoutes);
 app.use('/api/auth', authRoutes);

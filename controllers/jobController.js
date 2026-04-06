@@ -31,53 +31,11 @@ export async function getAllJobs(req, res) {
       query = query.sort({ postedAt: -1 });  // Default: newest first
     }
 
-    const jobs = await query.limit(50);
+    const jobs = await query.limit(60);
 
     res.json({ count: jobs.length, jobs });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
-}
-
-// Get job by ID
-export async function getJobById(req, res) {
-  try {
-    const job = await Job.findById(req.params.id);
-    if (!job) return res.status(404).json({ message: 'Job not found' });
-    res.json(job);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-// Create a new job
-export async function createJob(req, res) {
-  const job = new Job(req.body);
-  try {
-    const savedJob = await job.save();
-    res.status(201).json(savedJob);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-}
-
-// Update a job
-export async function updateJob(req, res) {
-  try {
-    const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(job);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-}
-
-// Delete a job
-export async function deleteJob(req, res) {
-  try {
-    await Job.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Job deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 }
