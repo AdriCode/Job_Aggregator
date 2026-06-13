@@ -5,8 +5,8 @@ const scrapeInternshala = async () => {
   let browser;
   try {
     browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      headless: 'new', //  run Chrome without a visible window. The 'new' value uses Puppeteer's newer headless mode which is more stable and harder to detect as a bot.
+      args: ['--no-sandbox', '--disable-setuid-sandbox'] // Chrome normally runs in a security sandbox. On some systems (Linux servers, CI environments) this causes permission errors. This flag disables it. Standard practice for running Puppeteer on servers.
     });
 
     const urls = [
