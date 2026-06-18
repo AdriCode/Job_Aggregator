@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Job from '../models/Job.js';
+import scrapeInternshala from '../scrapers/internshala.js';
 
 const fetchFromJSearch = async () => {
   const queries = ['software engineer intern', 'full stack developer', 'backend developer intern'];
@@ -52,7 +53,7 @@ const fetchFromJSearch = async () => {
   }
 };
 
-// helper to guess job type from title
+// Helper to guess job type from title
 const detectType = (title = '') => {
   const t = title.toLowerCase();
   if (t.includes('intern')) return 'internship';
@@ -60,4 +61,16 @@ const detectType = (title = '') => {
   return 'other';
 };
 
-export default fetchFromJSearch;
+// NEW — runs both sources together
+const fetchAllJobs = async () => {
+  console.log('Fetching from JSearch...');
+  await fetchFromJSearch();
+
+  console.log('Scraping Internshala...');
+  await scrapeInternshala();
+
+  console.log('✓ All sources fetched successfully');
+};
+
+export default fetchAllJobs;
+export { fetchFromJSearch };
